@@ -1,0 +1,47 @@
+float64(2)
+        ac = np.zeros(a.shape, dtype=np.int32)
+        act = ac.copy()
+        self.fastclip(a, m, M, ac)
+        self.clip(a, m, M, act)
+        assert_array_strict_equal(ac, act)
+
+    def test_simple_int64_out(self):
+        # Test native int32 input with int32 scalar min/max and int64 out.
+        a = self._generate_int32_data(self.nr, self.nc)
+        m = np.int32(-1)
+        M = np.int32(1)
+        ac = np.zeros(a.shape, dtype=np.int64)
+        act = ac.copy()
+        self.fastclip(a, m, M, ac)
+        self.clip(a, m, M, act)
+        assert_array_strict_equal(ac, act)
+
+    def test_simple_int64_inout(self):
+        # Test native int32 input with double array min/max and int32 out.
+        a = self._generate_int32_data(self.nr, self.nc)
+        m = np.zeros(a.shape, np.float64)
+        M = np.float64(1)
+        ac = np.zeros(a.shape, dtype=np.int32)
+        act = ac.copy()
+        self.fastclip(a, m, M, ac)
+        self.clip(a, m, M, act)
+        assert_array_strict_equal(ac, act)
+
+    def test_simple_int32_out(self):
+        # Test native double input with scalar min/max and int out.
+        a = self._generate_data(self.nr, self.nc)
+        m = -1.0
+        M = 2.0
+        ac = np.zeros(a.shape, dtype=np.int32)
+        act = ac.copy()
+        self.fastclip(a, m, M, ac)
+        self.clip(a, m, M, act)
+        assert_array_strict_equal(ac, act)
+
+    def test_simple_inplace_01(self):
+        # Test native double input with array min/max in-place.
+        a = self._generate_data(self.nr, self.nc)
+        ac = a.copy()
+        m = np.zeros(a.shape)
+        M = 1.0
+        self.fastclip(a,
